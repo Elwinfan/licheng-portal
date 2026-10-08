@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<title>力诚食品 · 工作台</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body { height:100%; }
+  body {
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    background:#f4f7f5; color:#1a2b22;
+    height:100dvh; overflow:hidden;
+  }
+
+  /* ===== 首页 ===== */
+  #home {
+    height:100dvh; display:flex; flex-direction:column;
+    padding:calc(env(safe-area-inset-top) + 28px) 20px calc(env(safe-area-inset-bottom) + 16px);
+    max-width:520px; margin:0 auto;
+  }
+  .logo-zone { text-align:center; padding:18px 0 26px; }
+  .logo-badge {
+    width:64px; height:64px; margin:0 auto 14px; border-radius:18px;
+    background:linear-gradient(135deg,#16a34a,#0d8a3f);
+    display:flex; align-items:center; justify-content:center;
+    font-size:34px; box-shadow:0 6px 18px rgba(22,163,74,.28);
+  }
+  .logo-title { font-size:26px; font-weight:800; letter-spacing:2px; }
+  .logo-sub {
+    margin-top:6px; font-size:13px; color:#7d8f85; letter-spacing:6px; text-indent:6px;
+  }
+
+  .grid { flex:1; display:grid; grid-template-columns:1fr 1fr; gap:14px; align-content:center; }
+  .card {
+    background:#fff; border-radius:18px; border:1px solid #e5ece8;
+    padding:22px 14px 18px; text-align:center; cursor:pointer;
+    box-shadow:0 2px 8px rgba(20,50,35,.05);
+    display:flex; flex-direction:column; align-items:center; gap:10px;
+    transition:transform .08s ease, box-shadow .08s ease;
+    user-select:none;
+  }
+  .card:active { transform:scale(.96); box-shadow:0 1px 4px rgba(20,50,35,.10); }
+  .card .ico {
+    width:54px; height:54px; border-radius:14px; background:#eaf7ef;
+    display:flex; align-items:center; justify-content:center; font-size:28px;
+  }
+  .card .name { font-size:16px; font-weight:700; }
+  .card .desc { font-size:11.5px; color:#8a998f; line-height:1.5; }
+
+  .foot {
+    text-align:center; font-size:11px; color:#a8b5ac; padding-top:14px;
+    letter-spacing:1px;
+  }
+
+  /* ===== 工具视图 ===== */
+  #tool {
+    height:100dvh; display:none; flex-direction:column;
+  }
+  #topbar {
+    flex:none; height:calc(env(safe-area-inset-top) + 46px);
+    padding:env(safe-area-inset-top) 8px 0;
+    background:#fff; border-bottom:1px solid #e5ece8;
+    display:flex; align-items:center; gap:4px;
+  }
+  #topbar button {
+    border:none; background:none; font-size:15px; color:#16a34a;
+    padding:8px 10px; cursor:pointer; font-weight:600; border-radius:10px;
+    font-family:inherit;
+  }
+  #topbar button:active { background:#eaf7ef; }
+  #tool-name {
+    flex:1; text-align:center; font-size:15px; font-weight:700;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  #tool-name-spacer { flex:none; width:86px; }
+  #frame-wrap { flex:1; position:relative; background:#fff; }
+  #frame { width:100%; height:100%; border:none; display:block; }
+</style>
+</head>
+<body>
+
+<!-- 首页 -->
+<div id="home">
+  <div class="logo-zone">
+    <div class="logo-badge">🥬</div>
+    <div class="logo-title">力诚食品</div>
+    <div class="logo-sub">工 作 台</div>
+  </div>
+  <div class="grid">
+    <div class="card" data-url="https://elwinfan.github.io/mind-route-app/licheng.html" data-name="力诚整理">
+      <div class="ico">📦</div>
+      <div class="name">力诚整理</div>
+      <div class="desc">照片库 · 水印 · 增量整理</div>
+    </div>
+    <div class="card" data-url="https://elwinfan.github.io/nanxiang-store/" data-name="南香门店">
+      <div class="ico">🏪</div>
+      <div class="name">南香门店</div>
+      <div class="desc">记账 · 照片整理</div>
+    </div>
+    <div class="card" data-url="https://elwinfan.github.io/van-stock/" data-name="车上存货">
+      <div class="ico">🚚</div>
+      <div class="name">车上存货</div>
+      <div class="desc">业务员记账 · 对账汇总</div>
+    </div>
+    <div class="card" data-url="https://elwinfan.github.io/HE/feifan.html" data-name="水印打卡">
+      <div class="ico">📷</div>
+      <div class="name">水印打卡</div>
+      <div class="desc">水印相机 · 拍照打卡</div>
+    </div>
+  </div>
+  <div class="foot">力诚食品 · 内部工作工具</div>
+</div>
+
+<!-- 工具视图 -->
+<div id="tool">
+  <div id="topbar">
+    <button id="btn-back" title="返回主页">‹ 返回</button>
+    <div id="tool-name">工具</div>
+    <button id="btn-newwin" title="新窗口打开">↗ 新窗口</button>
+    <div id="tool-name-spacer"></div>
+  </div>
+  <div id="frame-wrap">
+    <iframe id="frame" allow="camera; microphone; fullscreen; clipboard-read; clipboard-write; geolocation" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+</div>
+
+<script>
+(function(){
+  var home = document.getElementById('home');
+  var tool = document.getElementById('tool');
+  var frame = document.getElementById('frame');
+  var toolName = document.getElementById('tool-name');
+  var currentUrl = '';
+
+  document.querySelectorAll('.card').forEach(function(card){
+    card.addEventListener('click', function(){
+      currentUrl = card.getAttribute('data-url');
+      toolName.textContent = card.getAttribute('data-name');
+      frame.src = currentUrl;
+      home.style.display = 'none';
+      tool.style.display = 'flex';
+    });
+  });
+
+  document.getElementById('btn-back').addEventListener('click', function(){
+    frame.src = 'about:blank';
+    tool.style.display = 'none';
+    home.style.display = 'flex';
+  });
+
+  document.getElementById('btn-newwin').addEventListener('click', function(){
+    if (currentUrl) window.open(currentUrl, '_blank');
+  });
+})();
+</script>
+</body>
+</html>
