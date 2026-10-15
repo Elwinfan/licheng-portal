@@ -133,6 +133,57 @@
   var toolName = document.getElementById('tool-name');
   var currentUrl = '';
 
+  // ==== 下载转发层：iframe 内的下载转发到顶层执行（iframe 内下载会被手机浏览器吞）====
+  window.__portalDownload = function(href, name) {
+    try {
+      var a = document.createElement('a');
+      a.href = href;
+      a.download = name || '';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (e) { console.warn('portal download failed', e); }
+  };
+
+  function patchIframeDownloads() {
+    try {
+      var win = frame.contentWindow;
+      if (!win || win.__portalPatched) return;
+
+      // 1) 拦截程序化 a.click() 下载（工具页全是这种：createObjectURL + a.click）
+      var proto = win.HTMLAnchorElement.prototype;
+      var origClick = proto.click;
+      proto.click = function() {
+        try {
+          var h = this.getAttribute('href') || '';
+          var isDl = this.hasAttribute('download');
+          if ((h.indexOf('blob:') === 0 || h.indexOf('data:') === 0 || isDl) &&
+              window.__portalDownload) {
+            window.__portalDownload(h, this.getAttribute('download') || '');
+            return;
+          }
+        } catch (e) {}
+        return origClick.apply(this, arguments);
+      };
+
+      // 2) 兜底：拦截用户真实点击的 a 下载链接
+      win.document.addEventListener('click', function(e) {
+        var a = (e.target && e.target.closest) ? e.target.closest('a') : null;
+        if (!a) return;
+        var h = a.getAttribute('href') || '';
+        if (h.indexOf('blob:') === 0 || h.indexOf('data:') === 0 || a.hasAttribute('download')) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.__portalDownload(h, a.getAttribute('download') || '');
+        }
+      }, true);
+
+      win.__portalPatched = true;
+    } catch (err) { /* 跨域或未加载，忽略 */ }
+  }
+
+  frame.addEventListener('load', patchIframeDownloads);
+
   document.querySelectorAll('.card').forEach(function(card){
     card.addEventListener('click', function(){
       currentUrl = card.getAttribute('data-url');
